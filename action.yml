@@ -1,0 +1,30 @@
+name: 'build trunk github.io'
+description: 'automaticly builds the repo with `trunk build` then pushes the build to the github.io page'
+
+branding:
+  icon: upload-cloud
+  color: gray-dark
+
+inputs:
+  username:
+    description: 'github username'
+    required: true
+  token:
+    description: 'Token for authentication'
+    required: true
+  msg:
+    description: 'commit massage'
+    required: true
+runs:
+  using: "composite"
+  - uses: jetli/trunk-action@v0.1.0
+      with:
+        version: 'latest'
+  steps:
+    - run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
+      env:
+        USERNAME: ${{ inputs.username }}
+        TOKEN: ${{ inputs.token }}
+        MSG: ${{ inputs.msg }}
+        GITHUB_EVENT_REF: ${{ github.event.ref }}
